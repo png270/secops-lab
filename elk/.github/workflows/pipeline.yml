@@ -1,0 +1,44 @@
+name: SecOps Lab
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+
+  lint-configs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install YAML linter
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        run: yamllint .
+
+  validate-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose
+        run: docker compose -f docker/docker-compose.yml config
+
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
