@@ -1,4 +1,4 @@
-name: SecOps Lab
+name: ELK Security Lab CI
 
 on:
   push:
